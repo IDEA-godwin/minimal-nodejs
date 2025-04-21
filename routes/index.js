@@ -2,6 +2,10 @@ const express = require('express');
 const path = require('path');
 const router = express.Router();
 
+const { WarpFactory } = require("warp-contracts")
+const { Ed25519Extension } = require("m3tering-ed25519")
+const { EthersExtension } = require("m3tering-ethers")
+
 // Serve the index.html file for the root route
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/index.html'));
@@ -28,7 +32,7 @@ router.get('/contracts/:txId', async (req, res) => {
     .use(new Ed25519Extension())
     .use(new EthersExtension());
   const wallet = await warp.arweave.wallets.generate();
-  const contract = warp.contract(contractTxId).connect(wallet);
+  const contract = warp.contract(txId).connect(wallet);
   console.log(contract.evaluationOptions)
   const result = await contract.setEvaluationOptions({ ignoreExceptions: true }).dryWrite(
     input,
