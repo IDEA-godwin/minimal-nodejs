@@ -6,6 +6,18 @@ const { WarpFactory } = require("warp-contracts")
 const { Ed25519Extension } = require("m3tering-ed25519")
 const { EthersExtension } = require("m3tering-ethers")
 
+const { LevelDbCache } = require("warp-contracts/web")
+// LevelDB path to persist state
+const dbPath = './warp-cache';
+
+
+const warp = WarpFactory.forMainnet({ 
+  inMemory: false, dbLocation: dbPath,
+  cache: new LevelDbCache(dbPath)  
+})
+  .use(new Ed25519Extension())
+  .use(new EthersExtension());
+
 // Serve the index.html file for the root route
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/index.html'));
@@ -28,9 +40,6 @@ router.get('/contracts/:txId', async (req, res) => {
     { name: "Content-Type", value: "application/json" },
   ];
 
-  const warp = WarpFactory.forMainnet({ inMemory: true, dbLocation: "" })
-    .use(new Ed25519Extension())
-    .use(new EthersExtension());
   const wallet = await warp.arweave.wallets.generate();
   const contract = warp.contract(txId).connect(wallet);
   console.log(contract.evaluationOptions)

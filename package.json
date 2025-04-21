@@ -7,10 +7,11 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.19.2",
-    "warp-contracts": "1.4.41",
-    "warp-contracts-plugin-deploy": "^1.0.13",
+    "level": "^10.0.0",
     "m3tering-ed25519": "^1.0.2",
-    "m3tering-ethers": "^1.0.2"
+    "m3tering-ethers": "^1.0.2",
+    "warp-contracts": "1.4.41",
+    "warp-contracts-plugin-deploy": "^1.0.13"
   },
   "scripts": {
     "start": "node app.js"
